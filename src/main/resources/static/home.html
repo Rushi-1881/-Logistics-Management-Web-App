@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zeromile App - Home</title>
+</head>
+<body>
+    <h2>Register</h2>
+    <form id="registerForm">
+        Username: <input type="text" name="username" required><br>
+        Password: <input type="password" name="password" required><br>
+        Role: <input type="text" name="role" required><br>
+        <button type="submit">Register</button>
+    </form>
+
+    <h2>Login</h2>
+    <form id="loginForm">
+        Username: <input type="text" name="username" required><br>
+        Password: <input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                username: this.username.value,
+                password: this.password.value,
+                role: this.role.value
+            };
+
+            fetch('/api/users/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => document.getElementById('result').innerText = 'Registered: ' + data.username)
+            .catch(err => console.error(err));
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                username: this.username.value,
+                password: this.password.value
+            };
+
+            fetch('/api/users/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(res => res.text())
+            .then(msg => document.getElementById('result').innerText = msg)
+            .catch(err => console.error(err));
+        });
+    </script>
+</body>
+</html>
